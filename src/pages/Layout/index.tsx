@@ -25,10 +25,12 @@ const Layout = () => {
 
   const handleNavigate = (value: string) => {
     if (value === "-") {
-      navigate(path[current - 1 < 0 ? 0 : current - 1]);
+      navigate(path[current - 1 < 0 ? 0 : current - 1].split("/")[1]);
     } else {
       navigate(
-        path[current + 1 > path.length - 1 ? path.length - 1 : current + 1],
+        path[
+          current + 1 > path.length - 1 ? path.length - 1 : current + 1
+        ].split("/")[1],
       );
     }
   };
