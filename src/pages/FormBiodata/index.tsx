@@ -44,56 +44,51 @@ const FormBiodata = () => {
   const [kelurahanData, setKelurahanData] = useState<Place[]>([]);
 
   useEffect(() => {
-    if (form.province) {
-      const loadCity = async () => {
-        try {
-          const id = provinceData.find(
+    const loadLocationData = async () => {
+      try {
+        // Load City Data based on Province
+        if (form.province) {
+          const provinceId = provinceData.find(
             (item) => item.nama === form.province,
           )?.id;
-          const res = await import(`@/assets/data/kabupaten/${id}.json`);
-          setCityData(res.default);
-        } catch (error) {
-          console.log("error", error);
+          if (provinceId) {
+            const cityRes = await import(
+              `@/assets/data/kabupaten/${provinceId}.json`
+            );
+            setCityData(cityRes.default);
+          }
         }
-      };
 
-      loadCity();
-    }
-  }, [form.province]);
-
-  useEffect(() => {
-    if (form.city) {
-      const loadKecamatan = async () => {
-        try {
-          const id = cityData.find((item) => item.nama === form.city)?.id;
-          const res = await import(`@/assets/data/kecamatan/${id}.json`);
-          setKecamatanData(res.default);
-        } catch (error) {
-          console.log("error", error);
+        // Load Kecamatan Data based on City
+        if (form.city) {
+          const cityId = cityData.find((item) => item.nama === form.city)?.id;
+          if (cityId) {
+            const kecamatanRes = await import(
+              `@/assets/data/kecamatan/${cityId}.json`
+            );
+            setKecamatanData(kecamatanRes.default);
+          }
         }
-      };
 
-      loadKecamatan();
-    }
-  }, [form.city]);
-
-  useEffect(() => {
-    if (form.kecamatan) {
-      const loadKelurahan = async () => {
-        try {
-          const id = kecamatanData.find(
+        // Load Kelurahan Data based on Kecamatan
+        if (form.kecamatan) {
+          const kecamatanId = kecamatanData.find(
             (item) => item.nama === form.kecamatan,
           )?.id;
-          const res = await import(`@/assets/data/kelurahan/${id}.json`);
-          setKelurahanData(res.default);
-        } catch (error) {
-          console.log("error", error);
+          if (kecamatanId) {
+            const kelurahanRes = await import(
+              `@/assets/data/kelurahan/${kecamatanId}.json`
+            );
+            setKelurahanData(kelurahanRes.default);
+          }
         }
-      };
+      } catch (error) {
+        console.log("error", error);
+      }
+    };
 
-      loadKelurahan();
-    }
-  }, [form.kecamatan]);
+    loadLocationData();
+  }, [form.province, form.city, form.kecamatan, cityData, kecamatanData]);
 
   const handleSelectProvince = (value: string) => {
     const selectedProvince = provinceData.find((item) => item.nama === value);
