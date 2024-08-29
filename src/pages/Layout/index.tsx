@@ -1,6 +1,8 @@
 import { Button } from "@/components/button";
+import { RootState } from "@/redux/store";
 import { ArrowLeft } from "lucide-react";
 import { useEffect } from "react";
+import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Outlet } from "react-router-dom";
 const Layout = () => {
@@ -9,6 +11,7 @@ const Layout = () => {
   const path = ["/step-1", "/step-2", "/step-3"];
   const current = path.indexOf(location.pathname);
   const header = ["Identitas", "Foto", "Pratinjau"];
+  const form = useSelector((state: RootState) => state.form);
 
   useEffect(() => {
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {
@@ -23,10 +26,17 @@ const Layout = () => {
     };
   }, []);
 
+  const handleSubmit = () => {
+    console.log("submit :", form);
+  };
+
   const handleNavigate = (value: string) => {
     if (value === "-") {
       navigate(path[current - 1 < 0 ? 0 : current - 1].split("/")[1]);
     } else {
+      if (current === path.length - 1) {
+        handleSubmit();
+      }
       navigate(
         path[
           current + 1 > path.length - 1 ? path.length - 1 : current + 1
@@ -36,18 +46,22 @@ const Layout = () => {
   };
 
   return (
-    <div className="relative flex min-h-screen flex-col p-4">
-      <div className="fixed left-0 right-0 top-0 flex items-center gap-3 bg-background px-6 py-2">
-        <Button
-          variant={"link"}
-          className="inline-flex h-fit p-0"
-          onClick={() => handleNavigate("-")}
-        >
-          <ArrowLeft className="h-8 w-8 rounded-full stroke-primary stroke-[3px] shadow" />
-        </Button>
-        <h1 className="text-2xl font-bold text-primary">{header[current]}</h1>
+    <div className="relative mx-auto flex min-h-screen max-w-screen-md flex-col py-4">
+      <div className="fixed left-0 right-0 top-0 bg-background p-2">
+        <div className="mx-auto flex w-full max-w-screen-md gap-3">
+          <Button
+            variant={"link"}
+            className="inline-flex h-fit p-0"
+            onClick={() => handleNavigate("-")}
+          >
+            <ArrowLeft className="h-8 w-8 rounded-full stroke-primary stroke-[3px] shadow" />
+          </Button>
+          <h1 className="text-2xl font-bold leading-none text-primary">
+            {header[current]}
+          </h1>
+        </div>
       </div>
-      <div className="pb-12 pt-10">
+      <div className="px-2 pb-16 pt-10">
         <Outlet />
       </div>
       <Button

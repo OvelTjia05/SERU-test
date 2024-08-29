@@ -7,8 +7,8 @@ const FormPreview = () => {
 
   return (
     <div className="mx-auto max-w-4xl rounded-lg p-8 shadow-md">
-      <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
-        <div className="flex flex-col gap-4 [&>div]:grid [&>div]:gap-1.5">
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+        <div className="flex h-fit flex-col gap-4 rounded border border-primary px-2 py-4 shadow-md shadow-primary [&>div]:grid [&>div]:gap-1.5">
           <div>
             <Label>Nama Depan</Label>
             <p className="text-lg font-medium">{form.firstName}</p>
@@ -38,7 +38,7 @@ const FormPreview = () => {
             <p className="text-lg font-medium">{form.kelurahan}</p>
           </div>
         </div>
-        <div className="flex flex-col gap-4 [&>div]:grid [&>div]:gap-1.5">
+        <div className="flex h-fit flex-col gap-4 rounded-lg border border-secondary px-2 py-4 shadow-lg shadow-secondary [&>div]:grid [&>div]:gap-1.5">
           <div>
             <Label>KTP</Label>
             {form.KTP ? (
@@ -48,7 +48,7 @@ const FormPreview = () => {
                 className="h-auto w-full rounded-md shadow-md"
               />
             ) : (
-              <p className="text-gray-500">Tidak ada gambar KTP</p>
+              <p className="text-gray-500">Tidak ada foto KTP</p>
             )}
           </div>
           <div>
@@ -60,7 +60,7 @@ const FormPreview = () => {
                 className="h-auto w-full rounded-md shadow-md"
               />
             ) : (
-              <p className="text-gray-500">Tidak ada gambar selfie</p>
+              <p className="text-gray-500">Tidak ada foto selfie</p>
             )}
           </div>
           <div>
@@ -72,7 +72,7 @@ const FormPreview = () => {
                 className="h-auto w-full rounded-md shadow-md"
               />
             ) : (
-              <p className="text-gray-500">Tidak ada gambar foto bebas</p>
+              <p className="text-gray-500">Tidak ada foto bebas</p>
             )}
           </div>
         </div>

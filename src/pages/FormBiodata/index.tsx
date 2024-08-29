@@ -141,7 +141,7 @@ const FormBiodata = () => {
   };
 
   return (
-    <div className="flex flex-col gap-8 p-2">
+    <div className="flex flex-col gap-8 rounded-lg border border-secondary px-2 py-4 shadow-md shadow-secondary">
       <div className="grid gap-1.5">
         <Label htmlFor="first-name">Nama Depan</Label>
         <Input
@@ -216,7 +216,10 @@ const FormBiodata = () => {
           </PopoverContent>
         </Popover>
       </div>
-      <div className="grid gap-1.5">
+      <div
+        title={!form.province ? "Pilih provinsi terlebih dahulu" : undefined}
+        className={`grid gap-1.5 ${!form.province && "opacity-50 [&_*]:cursor-not-allowed"}`}
+      >
         <Label htmlFor="city">Kabupaten/Kota</Label>
         <Popover open={openCity} onOpenChange={setOpenCity}>
           <PopoverTrigger id="city" asChild>
@@ -259,7 +262,10 @@ const FormBiodata = () => {
           </PopoverContent>
         </Popover>
       </div>
-      <div className="grid gap-1.5">
+      <div
+        title={!form.city ? "Pilih kota terlebih dahulu" : undefined}
+        className={`grid gap-1.5 ${!form.city && "opacity-50 [&_*]:cursor-not-allowed"}`}
+      >
         <Label htmlFor="kecamatan">Kecamatan</Label>
         <Popover open={openKecamatan} onOpenChange={setOpenKecamatan}>
           <PopoverTrigger id="kecamatan" asChild>
@@ -305,7 +311,10 @@ const FormBiodata = () => {
           </PopoverContent>
         </Popover>
       </div>
-      <div className="grid gap-1.5">
+      <div
+        title={!form.kecamatan ? "Pilih kecamatan terlebih dahulu" : undefined}
+        className={`grid gap-1.5 ${!form.kecamatan && "opacity-50 [&_*]:cursor-not-allowed"}`}
+      >
         <Label htmlFor="kelurahan">Kelurahan</Label>
         <Popover open={openKelurahan} onOpenChange={setOpenKelurahan}>
           <PopoverTrigger id="kelurahan" asChild>
