@@ -1,6 +1,6 @@
 import { Button } from "@/components/button";
 import { ArrowLeft } from "lucide-react";
-// import { useEffect } from "react";
+import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Outlet } from "react-router-dom";
 const Layout = () => {
@@ -10,18 +10,18 @@ const Layout = () => {
   const current = path.indexOf(location.pathname);
   const header = ["Identitas", "Foto", "Pratinjau"];
 
-  // useEffect(() => {
-  //   const handleBeforeUnload = (event: BeforeUnloadEvent) => {
-  //     event.preventDefault();
-  //     return "";
-  //   };
+  useEffect(() => {
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      event.preventDefault();
+      return "";
+    };
 
-  //   window.addEventListener("beforeunload", handleBeforeUnload);
+    window.addEventListener("beforeunload", handleBeforeUnload);
 
-  //   return () => {
-  //     window.removeEventListener("beforeunload", handleBeforeUnload);
-  //   };
-  // }, []);
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, []);
 
   const handleNavigate = (value: string) => {
     if (value === "-") {
@@ -43,7 +43,7 @@ const Layout = () => {
           className="inline-flex h-fit p-0"
           onClick={() => handleNavigate("-")}
         >
-          <ArrowLeft className="h-8 w-8 rounded-full stroke-foreground stroke-[3px] shadow" />
+          <ArrowLeft className="h-8 w-8 rounded-full stroke-primary stroke-[3px] shadow" />
         </Button>
         <h1 className="text-2xl font-bold text-primary">{header[current]}</h1>
       </div>
