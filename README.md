@@ -11,6 +11,8 @@ Steps to run the project locally:
 
 Notes:
 
+- This project is already deployed to Vercel and can be accessed at https://seru-test-ovel.vercel.app/.
 - For the dropdown input section, all Indonesian region data is static JSON data retrieved from https://github.com/ibnux/data-indonesia.
+- User can zoom the picture in upload photo section by clicking the picture.
 
 # SERU-test
