@@ -1,12 +1,12 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-type FileData = {
+export type FileData = {
   name: string;
   size: string;
   base64: string;
 };
 
-type FormState = {
+export type FormState = {
   firstName: string;
   lastName: string;
   biodata: string;
