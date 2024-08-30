@@ -28,6 +28,7 @@ const ImageInput: React.FC<{
     imageStore?.size || null,
   );
   const [zoom, setZoom] = useState<number>(50);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
 
   //convert to base64 and set to store
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -70,29 +71,66 @@ const ImageInput: React.FC<{
     }
   };
 
-  const handleMovingImage = (e: React.MouseEvent<HTMLImageElement>) => {
+  const handleMoveImageTouch = (e: React.TouchEvent<HTMLImageElement>) => {
+    handleMoveImage(e, "touch");
+  };
+
+  const handleMoveImageMouse = (e: React.MouseEvent<HTMLImageElement>) => {
     e.preventDefault();
+    handleMoveImage(e, "mouse");
+  };
+
+  const handleMoveImage = (
+    e: React.TouchEvent<HTMLImageElement> | React.MouseEvent<HTMLImageElement>,
+    type: "touch" | "mouse",
+  ) => {
     const image = e.target as HTMLImageElement;
     if (!image) return;
     image.style.cursor = "grabbing";
-    const startX = e.clientX - image.offsetLeft;
-    const startY = e.clientY - image.offsetTop;
 
-    const handleMouseMove = (e: MouseEvent) => {
-      const x = e.clientX - startX;
-      const y = e.clientY - startY;
-      image.style.left = `${x}px`;
-      image.style.top = `${y}px`;
+    const isTouchEvent = type === "touch";
+    const startX = isTouchEvent
+      ? (e as React.TouchEvent).touches[0].clientX - position.x
+      : (e as React.MouseEvent).clientX - position.x;
+    const startY = isTouchEvent
+      ? (e as React.TouchEvent).touches[0].clientY - position.y
+      : (e as React.MouseEvent).clientY - position.y;
+
+    const handleMove = (event: TouchEvent | MouseEvent) => {
+      const x =
+        event instanceof TouchEvent
+          ? event.touches[0].clientX - startX
+          : (event as MouseEvent).clientX - startX;
+      const y =
+        event instanceof TouchEvent
+          ? event.touches[0].clientY - startY
+          : (event as MouseEvent).clientY - startY;
+      setPosition({ x, y });
     };
 
-    const handleMouseUp = () => {
-      document.removeEventListener("mousemove", handleMouseMove);
-      document.removeEventListener("mouseup", handleMouseUp);
+    const endDragging = () => {
+      if (isTouchEvent) {
+        document.removeEventListener("touchmove", handleMove);
+        document.removeEventListener("touchend", endDragging);
+      } else {
+        document.removeEventListener("mousemove", handleMove);
+        document.removeEventListener("mouseup", endDragging);
+      }
       image.style.cursor = "grab";
     };
 
-    document.addEventListener("mousemove", handleMouseMove);
-    document.addEventListener("mouseup", handleMouseUp);
+    if (isTouchEvent) {
+      document.addEventListener("touchmove", handleMove);
+      document.addEventListener("touchend", endDragging);
+    } else {
+      document.addEventListener("mousemove", handleMove);
+      document.addEventListener("mouseup", endDragging);
+    }
+  };
+
+  const handleOpenDialog = () => {
+    setZoom(50);
+    setPosition({ x: 0, y: 0 });
   };
 
   return (
@@ -118,7 +156,7 @@ const ImageInput: React.FC<{
         ) : (
           <div className="flex h-full w-full items-center justify-between gap-4">
             <div className="flex h-full items-center gap-4">
-              <Dialog onOpenChange={() => setZoom(50)}>
+              <Dialog onOpenChange={handleOpenDialog}>
                 <DialogTrigger className="h-full">
                   <img
                     src={image}
@@ -140,8 +178,11 @@ const ImageInput: React.FC<{
                       className="absolute h-full w-full rounded object-contain"
                       style={{
                         transform: `scale(${zoom / 50})`,
+                        left: `${position.x}px`,
+                        top: `${position.y}px`,
                       }}
-                      onMouseDown={handleMovingImage}
+                      onTouchStart={handleMoveImageTouch}
+                      onMouseDown={handleMoveImageMouse}
                     />
                   </div>
                   <DialogFooter>

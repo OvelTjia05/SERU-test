@@ -98,7 +98,6 @@ const Layout = () => {
       if (current === path.length - 1) {
         handleSubmit();
       } else {
-        console.log("masuk");
         navigate(path[current + 1].split("/")[1]);
       }
     }
